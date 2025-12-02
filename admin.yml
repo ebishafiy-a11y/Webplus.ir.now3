@@ -1,16 +1,22 @@
-name: اجرای مدیریت سایت
+name: ذخیره تغییرات
 
 on:
   workflow_dispatch:
 
 jobs:
-  admin-job:
+  update-content:
     runs-on: ubuntu-latest
     steps:
-      - name: دریافت کد مخزن
-        uses: actions/checkout@v3
+      - name: ساخت فایل index.html از محتوای پنل
+        run: |
+          cat > index.html << 'EOF'
+          {{ github.event.client_payload.content }}$
+          EOF
 
-      - name: استفاده از توکن مخفی
-        run: echo "توکن امن استفاده شد و آماده استفاده است"
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: ذخیره تغییرات
+        run: |
+          git config user.name "Admin Bot"
+          git config user.email "admin@site.com"
+          git add index.html
+          git commit -m "بروزرسانی محتوا از پنل ادمین" || echo "تغییری وجود ندارد"
+          git push
