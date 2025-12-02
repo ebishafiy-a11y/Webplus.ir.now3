@@ -1,1 +1,16 @@
+name: اجرای مدیریت سایت
 
+on:
+  workflow_dispatch:
+
+jobs:
+  admin-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: دریافت کد مخزن
+        uses: actions/checkout@v3
+
+      - name: استفاده از توکن مخفی
+        run: echo "توکن امن استفاده شد و آماده استفاده است"
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
